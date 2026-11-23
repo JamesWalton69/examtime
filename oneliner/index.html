@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#667085;--border:#e4e7ec;--primary:#111827;--soft:#eef1f5;--ok:#18794e;--danger:#c62828;--warn:#a15c00}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}
+.app{max-width:1100px;margin:auto;padding:20px}.hidden{display:none!important}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:0 5px 20px #1018280a}
+.top{position:sticky;top:0;z-index:10;padding:10px 0;background:#f5f7fbeF;backdrop-filter:blur(10px)}.topin{display:flex;align-items:center;justify-content:space-between;gap:15px}.title{font-weight:800;font-size:18px}.meta,.small{font-size:13px;color:var(--muted)}.timer{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}.timer.warn{color:var(--warn)}.timer.danger{color:var(--danger)}
+.progress{margin:16px 0}.pinfo{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:7px}.track{height:8px;background:#e7eaf0;border-radius:99px;overflow:hidden}.bar{height:100%;background:#111827;width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:18px}.qnum{font-size:13px;color:var(--muted);font-weight:750}.question{font-size:21px;line-height:1.5;font-weight:750;margin:8px 0 20px;white-space:pre-wrap}.options{display:grid;gap:10px}.option{display:flex;gap:12px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fff}.option.selected{border-color:#111827;background:#f1f3f6}.option input{margin-top:4px;accent-color:#111827}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:22px}.btn{border:1px solid var(--border);background:#fff;padding:11px 16px;border-radius:10px;font-weight:700}.btn:hover{background:var(--soft)}.btn.primary{background:#111827;color:#fff;border-color:#111827}.btn.danger{background:#b42318;color:#fff;border-color:#b42318}.btn:disabled{opacity:.45;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.qjump{border:1px solid var(--border);background:#fff;border-radius:8px;padding:8px 2px;font-size:12px}.qjump.current{background:#111827;color:#fff;border-color:#111827}.qjump.answered{box-shadow:inset 0 -3px 0 var(--ok)}.legend{display:grid;gap:7px;margin-top:14px;font-size:12px;color:var(--muted)}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;border:1px solid var(--border);margin-right:6px}.dot.answered{background:var(--ok)}.dot.current{background:#111827}
+.stats{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px}.submit{margin-top:18px}.editor{border:1px solid var(--border);border-radius:12px;overflow:hidden}.tabs{display:flex;border-bottom:1px solid var(--border);background:#fafafa}.tab{border:0;background:transparent;padding:9px 13px;font-size:13px;font-weight:700;color:var(--muted)}.tab.active{color:#111827;background:#fff}.md{width:100%;min-height:260px;border:0;outline:0;padding:16px;resize:vertical;font:14px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.preview{min-height:260px;padding:16px;line-height:1.6;overflow:auto}.preview code{background:#f0f2f5;padding:2px 5px;border-radius:5px}.preview pre{background:#111827;color:#fff;padding:12px;border-radius:8px;overflow:auto}.preview blockquote{border-left:3px solid #bbb;padding-left:12px;color:#667085}.result{text-align:center;padding:50px 20px}.result h1{margin-top:0}.error{color:var(--danger);white-space:pre-wrap}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{order:2}.question{font-size:18px}.card{padding:18px}}@media(max-width:520px){.app{padding:10px}.topin{padding:12px}.timer{font-size:17px}.title{font-size:15px}.grid{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<div id="loading" class="card">Loading quiz…</div>
+<div id="error" class="card hidden"><div id="errorText" class="error"></div></div>
+
+<div id="quiz" class="hidden">
+  <div class="top"><div class="card topin">
+    <div><div id="quizTitle" class="title">Quiz</div><div id="quizMeta" class="meta"></div></div>
+    <div id="timer" class="timer">00:00:00</div>
+  </div></div>
+
+  <div class="progress"><div class="pinfo"><span id="progressText"></span><span id="answeredText"></span></div><div class="track"><div id="progressBar" class="bar"></div></div></div>
+
+  <div class="layout">
+    <main>
+      <section class="card">
+        <div id="qNumber" class="qnum"></div>
+        <div id="questionText" class="question"></div>
+        <div id="answerArea"></div>
+        <div class="nav"><button id="prevBtn" class="btn">← Previous</button><button id="nextBtn" class="btn primary">Next →</button></div>
+      </section>
+      <section class="card submit">
+        <div class="stats"><span id="answeredStat"></span><span id="unansweredStat"></span></div>
+        <div style="margin-top:12px"><button id="submitBtn" class="btn danger">Submit Quiz</button></div>
+      </section>
+    </main>
+    <aside class="card sidebar"><b>Questions</b><div id="questionGrid" class="grid" style="margin-top:12px"></div><div class="legend"><div><span class="dot answered"></span>Answered</div><div><span class="dot current"></span>Current</div><div><span class="dot"></span>Unanswered</div></div></aside>
+  </div>
+</div>
+
+<div id="result" class="card result hidden">
+  <h1>Quiz Submitted</h1><p id="resultSummary"></p>
+  <button id="downloadBtn" class="btn primary">Download answers.json</button>
+</div>
+</div>
+
+<script>
+"use strict";
+const STORAGE_KEY="quiz_progress_v1";
+let quizData=null,questions=[],answers={},current=0,remainingSeconds=0,timerId=null,submitted=false,answersJson=null;
+const $=id=>document.getElementById(id);
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function inlineMd(s){
+ s=esc(s);
+ s=s.replace(/`([^`]+)`/g,"<code>$1</code>");
+ s=s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+ s=s.replace(/\*([^*]+)\*/g,"<em>$1</em>");
+ s=s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+ return s;
+}
+function markdown(md){
+ const lines=String(md??"").split("\n");let out="",list="",code=false,buf=[];
+ for(const line of lines){
+  if(line.trim().startsWith("```")){if(code){out+="<pre><code>"+esc(buf.join("\n"))+"</code></pre>";buf=[];code=false}else code=true;continue}
+  if(code){buf.push(line);continue}
+  if(/^###\s+/.test(line)){if(list){out+="</"+list+">";list=""}out+="<h3>"+inlineMd(line.replace(/^###\s+/,""))+"</h3>";continue}
+  if(/^##\s+/.test(line)){if(list){out+="</"+list+">";list=""}out+="<h2>"+inlineMd(line.replace(/^##\s+/,""))+"</h2>";continue}
+  if(/^#\s+/.test(line)){if(list){out+="</"+list+">";list=""}out+="<h1>"+inlineMd(line.replace(/^#\s+/,""))+"</h1>";continue}
+  if(/^>\s?/.test(line)){if(list){out+="</"+list+">";list=""}out+="<blockquote>"+inlineMd(line.replace(/^>\s?/,""))+"</blockquote>";continue}
+  if(/^[-*]\s+/.test(line)){if(!list){out+="<ul>";list="ul"}out+="<li>"+inlineMd(line.replace(/^[-*]\s+/,""))+"</li>";continue}
+  if(/^\d+\.\s+/.test(line)){if(!list){out+="<ol>";list="ol"}out+="<li>"+inlineMd(line.replace(/^\d+\.\s+/,""))+"</li>";continue}
+  if(list){out+="</"+list+">";list=""}
+  if(line.trim())out+="<p>"+inlineMd(line)+"</p>";
+ }
+ if(list)out+="</"+list+">";if(code)out+="<pre><code>"+esc(buf.join("\n"))+"</code></pre>";
+ return out||"<span class='small'>Nothing to preview yet.</span>";
+}
+function normalize(q,i){
+ const t=String(q.type||q.question_type||"qa").toLowerCase();
+ return {...q,number:q.number??q.question_number??i+1,type:(t==="mcq"||t==="multiple_choice")?"mcq":"qa",question:q.question??q.text??q.prompt??"",marks:q.marks??null,options:Array.isArray(q.options)?q.options:[]};
+}
+function ans(i){return answers[String(i)]??""}
+function answered(i){const a=ans(i);return Array.isArray(a)?a.length>0:String(a).trim().length>0}
+function save(){if(!submitted)localStorage.setItem(STORAGE_KEY,JSON.stringify({answers,current,remainingSeconds}));}
+function render(){
+ const q=questions[current];
+ $("qNumber").textContent="Question "+q.number+(q.marks!=null?" · "+q.marks+" mark"+(Number(q.marks)===1?"":"s"):"");
+ $("questionText").textContent=q.question;
+ if(q.type==="mcq"){
+  $("answerArea").innerHTML='<div class="options">'+q.options.map((o,i)=>{
+   const value=typeof o==="object"?(o.value??o.text??o.label??""):String(o),label=typeof o==="object"?(o.label??o.text??o.value??""):String(o),checked=ans(current)===value;
+   return `<label class="option ${checked?"selected":""}"><input type="radio" name="mcq" value="${esc(value)}" ${checked?"checked":""}><span>${esc(label)}</span></label>`;
+  }).join("")+"</div>";
+  document.querySelectorAll('input[name="mcq"]').forEach(x=>x.addEventListener("change",e=>{answers[String(current)]=e.target.value;save();update();render();}));
+ }else{
+  $("answerArea").innerHTML=`<div class="editor"><div class="tabs"><button id="editTab" class="tab active">Edit Markdown</button><button id="previewTab" class="tab">Preview</button></div><textarea id="md" class="md" placeholder="Write your answer in Markdown…">${esc(ans(current))}</textarea><div id="mdPreview" class="preview hidden"></div></div>`;
+  const md=$("md"),pv=$("mdPreview");
+  md.addEventListener("input",e=>{answers[String(current)]=e.target.value;save();pv.innerHTML=markdown(e.target.value);update()});
+  $("editTab").onclick=()=>{$("editTab").classList.add("active");$("previewTab").classList.remove("active");md.classList.remove("hidden");pv.classList.add("hidden");md.focus()};
+  $("previewTab").onclick=()=>{$("previewTab").classList.add("active");$("editTab").classList.remove("active");pv.innerHTML=markdown(md.value);pv.classList.remove("hidden");md.classList.add("hidden")};
+ }
+ $("prevBtn").disabled=current===0;$("nextBtn").disabled=current===questions.length-1;
+}
+function update(){
+ const n=questions.filter((_,i)=>answered(i)).length;
+ $("progressText").textContent=`Question ${current+1} / ${questions.length}`;
+ $("answeredText").textContent=`${n} answered`;$("answeredStat").textContent=`Answered: ${n}`;$("unansweredStat").textContent=`Unanswered: ${questions.length-n}`;
+ $("progressBar").style.width=((current+1)/questions.length*100)+"%";
+ document.querySelectorAll(".qjump").forEach((b,i)=>{b.classList.toggle("current",i===current);b.classList.toggle("answered",answered(i))});
+}
+function grid(){
+ $("questionGrid").innerHTML=questions.map(q=>`<button class="qjump">${esc(q.number)}</button>`).join("");
+ document.querySelectorAll(".qjump").forEach((b,i)=>b.onclick=()=>{current=i;render();update();scrollTo({top:0,behavior:"smooth"})});
+}
+function time(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function timer(){
+ $("timer").textContent=time(remainingSeconds);$("timer").classList.toggle("warn",remainingSeconds<=300&&remainingSeconds>60);$("timer").classList.toggle("danger",remainingSeconds<=60);
+}
+function submit(auto=false){
+ if(submitted)return;
+ if(!auto){const u=questions.length-questions.filter((_,i)=>answered(i)).length;if(!confirm(u?`You still have ${u} unanswered question${u===1?"":"s"}.\n\nSubmit anyway?`:"Submit your quiz now?"))return}
+ submitted=true;clearInterval(timerId);answersJson={quiz_title:quizData.title||"Quiz",submitted_at:new Date().toISOString(),submission_reason:auto?"time_expired":"manual",time_remaining_seconds:Math.max(0,Math.floor(remainingSeconds)),total_questions:questions.length,answered_questions:questions.filter((_,i)=>answered(i)).length,answers:questions.map((q,i)=>({question_number:q.number,type:q.type,answer:ans(i)}))};
+ localStorage.removeItem(STORAGE_KEY);$("quiz").classList.add("hidden");$("result").classList.remove("hidden");$("resultSummary").textContent=`${answersJson.answered_questions} of ${questions.length} questions answered${auto?". The timer expired and the quiz was submitted automatically.":"."}`;
+}
+function download(){const b=new Blob([JSON.stringify(answersJson,null,2)],{type:"application/json"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="answers.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u)}
+async function init(){
+ try{
+  const r=await fetch("./test.json",{cache:"no-store"});if(!r.ok)throw Error(`Could not load test.json (HTTP ${r.status}).`);
+  quizData=await r.json();questions=(quizData.questions||quizData.data||[]).map(normalize);if(!questions.length)throw Error("test.json contains no questions.");
+  const mins=Number(quizData.time_limit_minutes??quizData.duration_minutes??quizData.time_limit??0);if(!Number.isFinite(mins)||mins<=0)throw Error("test.json needs a positive time_limit_minutes value.");
+  remainingSeconds=Math.round(mins*60);$("quizTitle").textContent=quizData.title||"Quiz";$("quizMeta").textContent=`${questions.length} questions · ${mins} minute${mins===1?"":"s"}`;
+  try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(s){answers=s.answers||{};current=Math.min(Math.max(Number(s.current)||0,0),questions.length-1);if(Number.isFinite(s.remainingSeconds))remainingSeconds=s.remainingSeconds}}catch{}
+  if(remainingSeconds<=0){submit(true);return}
+  grid();render();update();timer();
+  $("prevBtn").onclick=()=>{if(current>0){current--;render();update();scrollTo({top:0,behavior:"smooth"})}};
+  $("nextBtn").onclick=()=>{if(current<questions.length-1){current++;render();update();scrollTo({top:0,behavior:"smooth"})}};
+  $("submitBtn").onclick=()=>submit(false);$("downloadBtn").onclick=download;
+  timerId=setInterval(()=>{if(remainingSeconds<=0){remainingSeconds=0;timer();submit(true)}else{remainingSeconds--;timer();save()}},1000);
+  $("loading").classList.add("hidden");$("quiz").classList.remove("hidden");
+ }catch(e){$("loading").classList.add("hidden");$("error").classList.remove("hidden");$("errorText").textContent=e.message||String(e)}
+}
+addEventListener("beforeunload",()=>{if(!submitted)save()});init();
+</script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+{
+  "title": "CBSE Class 12 Computer Science Quiz",
+  "time_limit_minutes": 90,
+  "questions": [
+    {
+      "question_number": 1,
+      "question": "State True or False: A Python List must always contain all its elements of the same data type.",
+      "question_type": "MCQ",
+      "options": [
+        "True",
+        "False"
+      ],
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 2,
+      "question": "What will be the output of the following statement?\nprint(14%3**2*4)",
+      "question_type": "MCQ",
+      "options": [
+        "16",
+        "64",
+        "20",
+        "256"
+      ],
+      "marks": 1,
+      "estimated_time": "1-2 minutes"
+    },
+    {
+      "question_number": 3,
+      "question": "Identify the output of the given string index operation.",
+      "question_type": "MCQ",
+      "options": [
+        "0",
+        "6",
+        "-1",
+        "ValueError"
+      ],
+      "marks": 1,
+      "estimated_time": "1-2 minutes"
+    },
+    {
+      "question_number": 4,
+      "question": "Which of the following is a valid Python identifier?",
+      "question_type": "MCQ",
+      "options": [
+        "global",
+        "Break",
+        "def",
+        "with"
+      ],
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 5,
+      "question": "Identify the invalid Python print statement.",
+      "question_type": "MCQ",
+      "options": [
+        "print(\"A\",10,end=\"*\")",
+        "print(\"A\",sep=\"*\",10)",
+        "print(\"A\",10,sep=\"*\")",
+        "print(\"A\"*10)"
+      ],
+      "marks": 1,
+      "estimated_time": "1-2 minutes"
+    },
+    {
+      "question_number": 6,
+      "question": "What will be the output of L[::-1] for L=['TIC','TAC']?",
+      "question_type": "MCQ",
+      "options": [
+        "['CIT', 'CAT']",
+        "['TIC', 'TAC']",
+        "['CAT', 'CIT']",
+        "['TAC', 'TIC']"
+      ],
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 7,
+      "question": "Which operator evaluates to True when the variables on either side point to the same memory location?",
+      "question_type": "MCQ",
+      "options": [
+        "is",
+        "is not",
+        "and",
+        "or"
+      ],
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 8,
+      "question": "What is the output when the following dictionary is iterated using for I in D?",
+      "question_type": "MCQ",
+      "options": [
+        "S01#S02#",
+        "95#96#",
+        "S01,95#S02,96#",
+        "S01#95#S02#96#"
+      ],
+      "marks": 1,
+      "estimated_time": "1-2 minutes"
+    },
+    {
+      "question_number": 10,
+      "question": "What will be the output of the given function call and subsequent print statement?",
+      "question_type": "MCQ",
+      "options": [
+        "25$$15",
+        "15$$25",
+        "25$$25",
+        "2525$$"
+      ],
+      "marks": 1,
+      "estimated_time": "1-2 minutes"
+    },
+    {
+      "question_number": 11,
+      "question": "What will be the output of the given try-except-finally code?",
+      "question_type": "MCQ",
+      "options": [
+        "ERROR#",
+        "WORD5#OVER",
+        "WORD5#",
+        "ERROR#OVER"
+      ],
+      "marks": 1,
+      "estimated_time": "1-2 minutes"
+    },
+    {
+      "question_number": 12,
+      "question": "Which of the following built-in function/method returns a dictionary?",
+      "question_type": "MCQ",
+      "options": [
+        "dict()",
+        "keys()",
+        "values()",
+        "items()"
+      ],
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 17,
+      "question": "Which networking device is used to regenerate and transmit a weakened signal ahead?",
+      "question_type": "MCQ",
+      "options": [
+        "Hub",
+        "Ethernet Card",
+        "Repeater",
+        "Modem"
+      ],
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 18,
+      "question": "Which option represents the technology/protocol used for phone calls over the Internet?",
+      "question_type": "MCQ",
+      "options": [
+        "PPP",
+        "FTP",
+        "HTTP",
+        "VoIP"
+      ],
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 19,
+      "question": "What is the expansion of ARPANET?",
+      "question_type": "Short Answer",
+      "marks": 1,
+      "estimated_time": "1 minute"
+    },
+    {
+      "question_number": 20,
+      "question": "Assertion (A): For a binary file opened using 'rb' mode, pickle.dump() will display an error.\nReason (R): pickle.dump() is used to read from a binary file.",
+      "question_type": "Assertion-Reason MCQ",
+      "options": [
+        "Both Assertion (A) and Reason (R) are true and Reason (R) is the correct explanation for Assertion (A).",
+        "Both Assertion (A) and Reason (R) are true but Reason (R) is not the correct explanation for Assertion (A).",
+        "Assertion (A) is true but Reason (R) is false.",
+        "Assertion (A) is false but Reason (R) is true."
+      ],
+      "marks": 1,
+      "estimated_time": "1-2 minutes"
+    },
+    {
+      "question_number": 22,
+      "question": "Explain the purpose of the return statement in a Python function with an example.",
+      "question_type": "Short Answer",
+      "marks": 2,
+      "estimated_time": "3-4 minutes"
+    },
+    {
+      "question_number": 23,
+      "question": "Identify the syntax error and explain implicit type conversion in the given Python context.",
+      "question_type": "Short Answer",
+      "marks": 2,
+      "estimated_time": "2-3 minutes"
+    },
+    {
+      "question_number": 24,
+      "question": "Explain the given dictionary operations and their results.",
+      "question_type": "Short Answer",
+      "marks": 2,
+      "estimated_time": "3-4 minutes"
+    },
+    {
+      "question_number": 25,
+      "question": "Determine the possible output of the given random.randint() code.",
+      "question_type": "Short Answer",
+      "marks": 2,
+      "estimated_time": "3-4 minutes"
+    },
+    {
+      "question_number": 26,
+      "question": "Debug the given Python code by correcting its syntax and logic errors.",
+      "question_type": "Short Answer",
+      "marks": 2,
+      "estimated_time": "4-5 minutes"
+    },
+    {
+      "question_number": 28,
+      "question": "Answer the internal-choice question on URL or PPP.",
+      "question_type": "Short Answer",
+      "marks": 2,
+      "estimated_time": "2-3 minutes"
+    },
+    {
+      "question_number": 29,
+      "question": "Write the required Python function for processing a text file.",
+      "question_type": "Long Answer",
+      "marks": 3,
+      "estimated_time": "6-7 minutes"
+    },
+    {
+      "question_number": 30,
+      "question": "Write the required Python stack operations for push, pop, and checking whether the stack is empty.",
+      "question_type": "Long Answer",
+      "marks": 3,
+      "estimated_time": "7-8 minutes"
+    },
+    {
+      "question_number": 31,
+      "question": "Determine the output of the given Python function and data-structure code.",
+      "question_type": "Long Answer",
+      "marks": 3,
+      "estimated_time": "5-6 minutes"
+    },
+    {
+      "question_number": 33,
+      "question": "Write the required Python functions for processing patient records in a CSV file.",
+      "question_type": "Long Answer",
+      "marks": 4,
+      "estimated_time": "7-9 minutes"
+    },
+    {
+      "question_number": 36,
+      "question": "Write the required Python functions for processing passenger records in a binary file.",
+      "question_type": "Long Answer",
+      "marks": 5,
+      "estimated_time": "10-12 minutes"
+    },
+    {
+      "question_number": 37,
+      "question": "Answer the networking case-study questions.",
+      "question_type": "Long Answer",
+      "marks": 5,
+      "estimated_time": "10-12 minutes"
+    }
+  ]
+}
